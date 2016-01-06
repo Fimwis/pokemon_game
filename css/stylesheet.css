@@ -1,0 +1,187 @@
+	html, body {
+        padding: 0;
+        margin: 0;
+        background-color: #78AB46;
+        width: 100%;
+        height: 100%;
+		font-family: Roboto;
+		-webkit-user-select: none;      
+		-moz-user-select: none;
+		-ms-user-select: none;
+    }
+
+    #main-container{
+        width: 18em;
+        height: 26em;
+        border: 6px solid black;
+    }
+	/*---- Theme Classes ----*/
+	.top-screen{
+        height: 14em;
+        overflow: hidden;
+    }
+    .img-spacing{
+        float: left;
+    }
+    .bottom-screen{
+        overflow:hidden;
+    }
+	.absolute {
+        position: absolute !important;
+    }
+	.move1-text{
+        z-index: 1;
+        bottom:6.8em;
+        left:3em;
+    }
+    .move2-text{
+        z-index: 1;
+        bottom:6.8em;
+        right:3em;
+    }
+    .move3-text{
+        z-index: 1;
+        top:18.7em;
+        left:3em;
+    }
+    .move4-text{
+        z-index: 1;
+        top:18.7em;
+        right:2.7em;
+    }
+    .user-pokemon-name{
+        width: 3em;
+        top: 9.15em;
+        right: 6.2em;
+        z-index: 1;
+        font-size: 14.5px;
+    }
+    .user-pokemon-lvl{
+        top: 11.15em;
+        right: 1.15em;
+        font-size: 12px;
+        z-index: 1;
+    }
+    .user-pokemon-gender{
+        width:.68em; 
+        right:2.65em; 
+        top:8.56em;
+        z-index: 1;
+    }
+    .enemy-pokemon-name{
+        width: 3em;
+        z-index: 1;
+        font-size: 14.5px;
+        top: .75em;
+        left: .8em;
+    }
+    .enemy-pokemon-lvl{
+        z-index: 1;
+        font-size: 12px;
+        left: 8.6em;
+        top: .985em;
+    }
+    .enemy-pokemon-gender{
+        width:.6em;
+        left: 4em;
+        top: .9em;
+        z-index: 1;
+    }
+    #user-health-bar{
+        width: 100%;
+        height: .3em;
+        background-color: #61B329;
+        z-index: 1;
+    }
+    #enemy-health-bar{
+        width: 100%;
+        height: .3em;
+        background-color: #61B329;
+        z-index: 1;
+    }
+    #chat-text{
+        width: 15em;
+        top: 11.5em;
+        left: .8em;
+    }
+    .user-attack{
+        width: 5em;
+        top: 4.8em;
+        right: 2.5em;
+        z-index: 1;
+    }
+    .cpu-attack{
+        width: 5em;
+        top: 8.5em;
+        left: 2.8em;
+        z-index: 1;
+    }
+	.bullseye {
+		-webkit-filter: blur(0);
+        position: relative !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate3d(-50%, -50%, 0) !important;
+    }
+	
+	.box-shadow-1 {
+        box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37) !important;
+    }
+
+    .border-radius {
+        -webkit-border-radius: 2px !important;
+        -moz-border-radius: 2px !important;
+        border-radius: 2px !important;
+    }
+
+    .pointer {
+        cursor: pointer;
+    }
+
+    .hide {
+        display: none !important;
+    }
+	
+	.text-center {
+        text-align: center !important;
+    }
+	
+	.text-30 {
+        font-size: 30px !important;
+        line-height: 40px !important;
+        letter-spacing: normal !important;
+    }
+
+    .text-18 {
+        font-size: 18px !important;
+        line-height: 24px !important;
+        letter-spacing: 0.005em !important;
+        font-weight: bold;
+    }
+    /* */
+    .text-subhead {
+        font-size: 15px !important;
+        line-height: 24px !important;
+        letter-spacing: 0.01em !important;
+    }
+    .pointer{
+        cursor: pointer;
+    }
+    #refresh{
+        display: inline-block;
+        height:40px;
+        width:90px;
+        background-color:#cc0000;
+        font-family:arial;
+        font-weight:bold;
+        color:#ffffff;
+        border-radius: 8px;
+        text-align:center;
+        margin-top:2px;
+        cursor: pointer;
+    }
+    #playAgain{
+        position: absolute;
+        right: 380px;
+        bottom: 330px;
+    }
