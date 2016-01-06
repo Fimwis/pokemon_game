@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<link rel="icon" type="image/png" href="img/logo_pokeball.png" />
+		<meta charset="utf-8">
+		<title>Pokemon Battle Demo</title>
+		
+		<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+		<link href="css/stylesheet.css" rel="stylesheet">
+		
+	</head>
+	
+	<body>
+		<div id="background">
+			<img src="img/grass.png" id="grass" class="tallGrass absolute" style="width:10em; left:7em; top:8em; z-index: 1">
+			<img src="img/grass.png" class="tallGrass absolute" style="width:10em; left:17em; top:8em; z-index: 1">
+			<img src="img/grass.png" class="tallGrass absolute" style="width:8em; z-index: 1; right:7em; top:5em; -ms-transform: rotate(90deg); -webkit-transform: rotate(90deg); transform: rotate(90deg);">
+			<img src="img/grass.png" class="tallGrass absolute" style="width:12em; z-index: 1; left:50%; top:50%; -ms-transform: rotate(180deg); -webkit-transform: rotate(180deg); transform: rotate(180deg);">
+			<img src="img/grass.png" class="tallGrass absolute" style="width:8em; z-index: 1; right:17.5em; top:5em; -ms-transform: rotate(270deg); -webkit-transform: rotate(270deg); transform: rotate(270deg);">
+		</div>
+		<div id="character">
+			<div id="result"></div>
+		        <img src="img/trainer.png" id="trainer" style="width:3em; position: relative; left:20px; top:30px"/>
+		</div>
+		<div id="main-container" class="bullseye">
+		<div class="top-screen">
+			<!--Player character-->
+			<img src="img/charmander.png" class="charmander absolute" style="width:6.5em; top:4.75em; left:1em"/>
+			<div class="absolute user-pokemon-name"></div>
+			<div class="absolute user-pokemon-lvl"></div>
+			<div class="absolute" style="width: 4.25em; top: 9.77em; left: 10.85em">
+				<div id="user-health-bar" class="absolute"></div>
+			</div>
+			<img src="img/your_info.png" class="absolute" style="width:8.5em; right:10px; top:8.15em"/>
+			<img src="img/pok-gender-male.png" class="absolute user-pokemon-gender"/>
+			
+			<img id="attack-img" src="img/attack.png" class="absolute hide" />
+
+			<!--cpu character-->
+			<img src="img/pikachu.png" class="absolute pika" style="width:4em; top:2.5em; right:2.3em"/>
+			
+			<div class="absolute enemy-pokemon-name"></div>
+			<div class="absolute enemy-pokemon-lvl"></div>
+			<div class="absolute" style="width: 4em; top: 2.05em; left: 2.67em">
+				<div id="enemy-health-bar" class="absolute"></div>
+			</div>
+			
+			<img src="img/pok-gender-fem.png" class="absolute enemy-pokemon-gender">
+			
+			<!-- the style below starting with "-moz-transform" sflips the hp bar image so it points to pikachu and adds clarity -->
+			<img src="img/your_info.png" class="absolute" style="width:8em; left:.5em; top:.5em; -moz-transform: scaleX(-1);  -o-transform: scaleX(-1); -webkit-transform: scaleX(-1);  transform: scaleX(-1); filter: FlipH; -ms-filter: "FlipH";"/>
+			
+			<!--chat window-->
+			<div id="chat-text" class="absolute text-subhead"></div>
+			<img src="img/battlefield.png" class="img-spacing" style="width:18em"/>
+			<img src="img/chat_window.png" class="img-spacing" style="width:18em"/>
+		</div>
+		<div class="bottom-screen">
+			<!--player actions-->
+			<div class="user-buttons hide">
+				<div class="move1-button pointer playSoundSA" value="0">
+					<div class="move1-text absolute text-center text-18"></div>
+					<img class="absolute" src="img/move.png" style="width:7em; top:16em; left: 1.5em"/>
+				</div>
+				<div class="move2-button pointer playSound" value="1">
+					<div class="move2-text absolute text-center text-18"></div>
+					<img class="absolute" src="img/move.png" style="width:7em; top:16em; right: 1.5em"/>
+				</div>
+				<div class="move3-button pointer playSoundSE" value="2">
+					<div class="move3-text absolute text-center text-18"></div>
+					<img class="absolute" src="img/move.png" style="width:7em; top:20.2em; left: 1.5em"/>
+				</div>
+				<div class="move4-button pointer playSound" value="3">
+					<div class="move4-text absolute text-center text-18"></div>
+					<img class="absolute" src="img/move.png" style="width:7em; right: 1.5em; top:20.2em;"/>
+				</div>
+			</div>
+				<div id="win-battle" class="absolute text-30 text-center hide"></div>
+				<div id="lose-battle" class="absolute text-30 text-center hide"></div>
+			<img src="img/toolbar_bg.png" class="img-spacing" style="width:18em; height:12em"/>
+		</div>
+		</div>
+		<div id="playAgain">
+			<FORM>
+				<INPUT id="refresh" type="button" onClick="history.go(0)" VALUE="Play Again">
+			</FORM>
+		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script type="text/javascript" src="js/javascript.js"></script>
+		</body>
+
+</html>
