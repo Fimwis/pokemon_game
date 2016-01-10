@@ -11,18 +11,20 @@
 	</head>
 	
 	<body>
+
 		<div id="background">
-			<img src="img/grass.png" id="grass" class="tallGrass absolute" style="width:10em; left:7em; top:8em; z-index: 1">
+		<canvas id="canvas" width="1270" height="615"></canvas>
+			<img src="img/grass.png" id="grass1" class="tallGrass absolute" style="width:10em; left:7em; top:8em; z-index: 1">
 			<img src="img/grass.png" class="tallGrass absolute" style="width:10em; left:17em; top:8em; z-index: 1">
+			<img src="img/grass.png" id="grass2" class="tallGrass absolute" style="width:8em; z-index: 1; right:17.5em; top:5em; -ms-transform: rotate(270deg); -webkit-transform: rotate(270deg); transform: rotate(270deg);">
 			<img src="img/grass.png" class="tallGrass absolute" style="width:8em; z-index: 1; right:7em; top:5em; -ms-transform: rotate(90deg); -webkit-transform: rotate(90deg); transform: rotate(90deg);">
-			<img src="img/grass.png" class="tallGrass absolute" style="width:12em; z-index: 1; left:50%; top:50%; -ms-transform: rotate(180deg); -webkit-transform: rotate(180deg); transform: rotate(180deg);">
-			<img src="img/grass.png" class="tallGrass absolute" style="width:8em; z-index: 1; right:17.5em; top:5em; -ms-transform: rotate(270deg); -webkit-transform: rotate(270deg); transform: rotate(270deg);">
+			<img src="img/grass.png" id="grass3" class="tallGrass absolute" style="width:12em; z-index: 1; left:50%; top:50%; -ms-transform: rotate(180deg); -webkit-transform: rotate(180deg); transform: rotate(180deg);">
 		</div>
 		<div id="character">
 			<div id="result"></div>
-		        <img src="img/trainer.png" id="trainer" style="width:3em; position: relative; left:20px; top:30px"/>
+		        <img src="img/trainer.png" id="trainer" style="width:3em; position: absolute; left:20px; top:30px"/>
 		</div>
-		<div id="main-container" class="bullseye">
+		<div id="main-container" class="bullseye" style="display:none">
 		<div class="top-screen">
 			<!--Player character-->
 			<img src="img/charmander.png" class="charmander absolute" style="width:6.5em; top:4.75em; left:1em"/>
@@ -81,9 +83,7 @@
 		</div>
 		</div>
 		<div id="playAgain">
-			<FORM>
-				<INPUT id="refresh" type="button" onClick="history.go(0)" VALUE="Play Again">
-			</FORM>
+				<input id="refresh" style="display:none" type="button" onClick="history.go(0)" VALUE="Play Again">
 		</div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script type="text/javascript" src="js/javascript.js"></script>
