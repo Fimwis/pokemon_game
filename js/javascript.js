@@ -1,21 +1,90 @@
-var characterMove = $(function(){
+var canvas;
+var canvasContext;
+var endBattle = false;
+var startBattle = false;
+var grass1 = document.getElementById("grass1");
+var grass1Location = grass1.getBoundingClientRect();
+
+var grass2 = document.getElementById("grass2");
+var grass2Location = grass2.getBoundingClientRect();
+
+var grass3 = document.getElementById("grass3");
+var grass3Location = grass2.getBoundingClientRect();
+
+var pokeBattle = document.createElement("audio");
+pokeBattle.src = "soundsFx/battle_wild_pokemon.mp3";
+pokeBattle.volume = 0.7;
+pokeBattle.autoplay = false;
+pokeBattle.preLoad = true;
+pokeBattle.addEventListener('ended', function() {
+    this.currentTime = 0;
+    this.play();
+}, false);
+pokeBattle.pause();
+var wildPokemon = Math.floor(Math.random() * 3);
+window.onload = function(){
+    canvas = document.getElementById("canvas");
+    canvasContext = canvas.getContext("2d");
+    canvasContext.fillStyle = "#78AB46";
+    canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+    battle();
+}
+function battle(){    
     $(this).keydown(function(e){
     if(e.which == 37){
-        $('#trainer').stop(true).animate({left: '-=15px', height:'toggle'}, function(){
-        });
+        $('#trainer').stop(true).animate({left: '-=20px'});
     }
     else if(e.which == 38){
-        $('#trainer').stop(true).animate({top: '-=15px'});
+        $('#trainer').stop(true).animate({top: '-=20px'});
+
     }
     else if(e.which == 39){
-        $('#trainer').stop(true).animate({left: '+=15px'});
+        $('#trainer').stop(true).animate({left: '+=20px'});
+
     }
     else if(e.which == 40){
-        $('#trainer').stop(true).animate({top: '+=15px'});
+        $('#trainer').stop(true).animate({top: '+=20px'});
+
+    }
+    var trainer = document.getElementById("trainer");
+    var trainerLocation = trainer.getBoundingClientRect();
+    var trainerX = trainerLocation.left;
+    var trainerY = trainerLocation.top;
+    if(trainerX >= (grass1Location.left + 5) && trainerX <= (grass1Location.left + (grass1Location.width * 2) - 5)){
+        if(trainerY >= (grass1Location.top + 5) && trainerY <= (grass1Location.top + grass1Location.height - 5)){
+            startBattle = true;
+            console.log(startBattle);
+            $("#trainer").fadeOut(3000);
+            $("#background").fadeOut(3000);
+            pokeBattle.play();
+            $("#main-container").fadeIn("slow");
+            $("#refresh").fadeIn("slow");
+        }
+    }
+    else if(trainerX >= (grass2Location.left + 5) && trainerX <= (grass2Location.left + (grass2Location.width * 2) - 5)){
+        if(trainerY >= (grass2Location.top + 5) && trainerY <= (grass2Location.top + grass2Location.height - 5)){
+            startBattle = true;
+            $("#trainer").fadeOut(3000);
+            $("#background").fadeOut(3000);
+            pokeBattle.play();
+            $("#main-container").fadeIn("slow");
+            $("#refresh").fadeIn("slow");
+        }
+    }
+    else if(trainerX >= (grass3Location.left + 5) && trainerX <= grass3Location.left + (grass3Location.width - 5)){
+        if(trainerY >= (grass3Location.top + 5) && trainerY <= (grass3Location.top + grass3Location.height - 5)){
+            startBattle = true;
+
+            $("#trainer").fadeOut(3000);
+            $("#background").fadeOut(3000);
+            pokeBattle.play();
+            $("#main-container").fadeIn("slow");
+            $("#refresh").fadeIn("slow");
+        }
     }
 });
-    });
-    var charmander = {
+}
+var charmander = {
     name: "Charmander",
     health: 100,
     lvl: 6,
@@ -282,7 +351,7 @@ var playerTurn = {
                 setTimeout(loop, 1500)
             }
         };
-            var getMoveType = function(){
+         var getMoveType = function(){
             showMoveAnimation();
             var obj = document.createElement("audio");   
             if(currentUserMove.type == "physical"){
@@ -380,15 +449,23 @@ var playerTurn = {
         setUpUserField();
     }
 };
-
 var loop = function(){
     if(userPokemon.health <= 0){
+        endBattle = true;
+        if(endBattle){
         $("#lose-battle").removeClass("hide");
-        console.log("You lose");
+        pokeBattle.pause();
+    }
     }
     else if(cpuPokemon.health <= 0){
+        endBattle = true;
+        if(endBattle){
+        $("#trainer").fadeIn(3000);
+        $("#background").fadeIn(3000);
+        $("#main-container").fadeOut(4000);
         $("#win-battle").removeClass("hide");
-        console.log("You win");
+        pokeBattle.pause();
+    }
     }
     else{
         currentState.play();
@@ -401,8 +478,8 @@ var init = function(){
     $(".enemy-pokemon-name").text(cpuPokemon.name);
     $(".user-pokemon-lvl").text("Lv" + userPokemon.lvl);
     $(".enemy-pokemon-lvl").text("Lv" + cpuPokemon.lvl);
-    $("#win-battle").text("The enemy " + cpuPokemon.name + " fainted. You win the battle!");
     $("#lose-battle").text("Your " + userPokemon.name + " has fainted. You quickly run away to the Pokemon Center...");
+    $("#win-battle").text("The enemy " + cpuPokemon.name + " fainted. You win the battle!");    
     currentState = playerTurn;
     loop();
 };
