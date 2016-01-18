@@ -179,11 +179,6 @@
         margin-top:2px;
         cursor: pointer;
     }
-    #playAgain{
-        position: absolute;
-        right: 380px;
-        bottom: 330px;
-    }
     #background{
         text-align: center;
     }
