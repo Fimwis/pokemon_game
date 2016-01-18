@@ -257,8 +257,12 @@ var cpuTurn = {
             var criticalStrike = Math.random();
             if((currentCPUMove.criticalChance * 5) >= criticalStrike || currentCPUMove.criticalChance == -1){
             if (!cpuPokemon.effect){
-                userPokemon.health -= currentCPUMove.power;
-
+                if(currentCPUMove.type == "physical"){
+                userPokemon.health -= currentCPUMove.power - ((userPokemon.physDefence / 100) * currentCPUMove.power);
+                }
+                else if(currentCPUMove.type == "special"){
+                userPokemon.health -= currentCPUMove.power - ((userPokemon.specDefence / 100) * currentCPUMove.power);
+                }
             }else if(cpuPokemon.effect == 0.25)
             {
                 userPokemon.health -= (currentCPUMove.power)-(currentCPUMove.power * cpuPokemon.effect);
@@ -397,8 +401,13 @@ var playerTurn = {
             var criticalStrike = Math.random();
             if((currentUserMove.criticalChance * 5) >= criticalStrike || currentUserMove.criticalChance == -1){
             if (!userPokemon.effect){
-                cpuPokemon.health -= currentUserMove.power;
+                if(currentUserMove.type == "physical"){
+                cpuPokemon.health -= currentUserMove.power - ((cpuPokemon.physDefence /100) * currentUserMove.power);
+                }
+                else if(currentUserMove.type == "special"){
+                cpuPokemon.health -= currentUserMove.power - ((cpuPokemon.specDefence /100) * currentUserMove.power);
 
+                }
             }
             else if(userPokemon.effect == 0.25){
                 cpuPokemon.health -= (currentUserMove.power)-(currentUserMove.power * userPokemon.effect);
