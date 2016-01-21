@@ -91,6 +91,7 @@ var charmander = {
     effect: null,
     physDefence: 30,
     specDefence: 40,
+    xp: 0,
     moves: [{
         name:"ember",
         type: "special",
@@ -273,6 +274,7 @@ var cpuTurn = {
                 cpuPokemon.effect = null;
             }
             $("#user-health-bar").css("width", userPokemon.health + "%");
+            $("#user-health-bar").text("100/" + userPokemon.health);
             currentState = playerTurn;
             loop();
         }
@@ -291,6 +293,7 @@ var cpuTurn = {
             }
             $("#chat-text").text("The enemy " + cpuPokemon.name + " critically hit!!!");
             $("#user-health-bar").css("width", userPokemon.health + "%");
+            $("#user-health-bar").text("100/" + userPokemon.health);   
             currentState = playerTurn;
             loop();
         }
@@ -469,6 +472,7 @@ var loop = function(){
     else if(cpuPokemon.health <= 0){
         endBattle = true;
         if(endBattle){
+        userPokemon.xp = 50;
         $("#trainer").fadeIn(3000);
         $("#background").fadeIn(3000);
         $("#main-container").fadeOut(4000);
@@ -483,6 +487,7 @@ var loop = function(){
 var init = function(){
     cpuPokemon = pikachu;
     userPokemon = charmander;
+    $("#user-health-bar").text("100/" + userPokemon.health);   
     $(".user-pokemon-name").text(userPokemon.name);
     $(".enemy-pokemon-name").text(cpuPokemon.name);
     $(".user-pokemon-lvl").text("Lv" + userPokemon.lvl);
