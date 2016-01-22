@@ -1,5 +1,11 @@
+//global variables
 var canvas;
 var canvasContext;
+
+var currentState;
+var cpuPokemon;
+var userPokemon;
+
 var endBattle = false;
 var startBattle = false;
 var grass1 = document.getElementById("grass1");
@@ -11,6 +17,7 @@ var grass2Location = grass2.getBoundingClientRect();
 var grass3 = document.getElementById("grass3");
 var grass3Location = grass2.getBoundingClientRect();
 
+//background music
 var pokeBattle = document.createElement("audio");
 pokeBattle.src = "soundsFx/battle_wild_pokemon.mp3";
 pokeBattle.volume = 0.7;
@@ -29,6 +36,7 @@ window.onload = function(){
     canvasContext.fillRect(0, 0, canvas.width, canvas.height);
     battle();
 }
+//conditions that must be met for battle to start
 function battle(){    
     $(this).keydown(function(e){
     if(e.which == 37){
@@ -54,7 +62,7 @@ function battle(){
         if(trainerY >= (grass1Location.top + 5) && trainerY <= (grass1Location.top + grass1Location.height - 5)){
             startBattle = true;
             console.log(startBattle);
-            $("#trainer").fadeOut(3000);
+            $("#trainer").fadeOut(2000);
             $("#background").fadeOut(3000);
             pokeBattle.play();
             $("#main-container").fadeIn("slow");
@@ -64,7 +72,7 @@ function battle(){
     else if(trainerX >= (grass2Location.left + 5) && trainerX <= (grass2Location.left + (grass2Location.width * 2) - 5)){
         if(trainerY >= (grass2Location.top + 5) && trainerY <= (grass2Location.top + grass2Location.height - 5)){
             startBattle = true;
-            $("#trainer").fadeOut(3000);
+            $("#trainer").fadeOut(2000);
             $("#background").fadeOut(3000);
             pokeBattle.play();
             $("#main-container").fadeIn("slow");
@@ -75,7 +83,7 @@ function battle(){
         if(trainerY >= (grass3Location.top + 5) && trainerY <= (grass3Location.top + grass3Location.height - 5)){
             startBattle = true;
 
-            $("#trainer").fadeOut(3000);
+            $("#trainer").fadeOut(2000);
             $("#background").fadeOut(3000);
             pokeBattle.play();
             $("#main-container").fadeIn("slow");
@@ -84,18 +92,21 @@ function battle(){
     }
 });
 }
+//pokemon objects
+//user pokemon
 var charmander = {
     name: "Charmander",
     health: 100,
     lvl: 6,
-    effect: null,
+    physAttack: 25,
+    specAttack: 25,
     physDefence: 30,
     specDefence: 40,
     xp: 0,
     moves: [{
         name:"ember",
         type: "special",
-        power: 40,
+        power: 25,
         accuracy: 1,
         PP: 25,
         criticalChance: 0.15 
@@ -111,7 +122,7 @@ var charmander = {
         {
         name:"growl",
         type: "status",
-        power: 0.25,
+        power: 0.9,
         accuracy: 0.8,
         PP: 40,
         criticalChance: -1
@@ -125,15 +136,17 @@ var charmander = {
         criticalChance: 0.2
     }]
 };
+//enemy/wild pokemon
 var pikachu = {
     name: "Pikachu",
     health: 100,
     lvl: 8,
-    effect: null,
     physDefence: 40,
     specDefence: 25,
+    physAttack: 20,
+    specAttack: 35,
     moves: [
-        {
+    {
         name:"thunder-shock",
         type: "special",
         power: 33,
@@ -152,7 +165,7 @@ var pikachu = {
     {
         name:"tail whip",
         type: "status",
-        power: 0.30,
+        power: 0.85,
         accuracy: 0.9,
         PP: 10,
         criticalChance: -1
@@ -167,10 +180,7 @@ var pikachu = {
     }]
 };
 
-var currentState;
-var cpuPokemon;
-var userPokemon;
-
+//cpu ai and its course of action during its turn
 var cpuTurn = {
     play: function () {
         var randomMove = Math.floor(Math.random() * 4);
@@ -256,44 +266,35 @@ var cpuTurn = {
             $("#attack-img").addClass("hide");
             $("#attack-img").removeClass("cpu-attack");
             var criticalStrike = Math.random();
-            if((currentCPUMove.criticalChance * 5) >= criticalStrike || currentCPUMove.criticalChance == -1){
-            if (!cpuPokemon.effect){
+            if((currentCPUMove.criticalChance/5) < criticalStrike || currentCPUMove.criticalChance == -1){
                 if(currentCPUMove.type == "physical"){
-                userPokemon.health -= currentCPUMove.power - ((userPokemon.physDefence / 100) * currentCPUMove.power);
+                userPokemon.health -= (currentCPUMove.power + (currentCPUMove.power * (cpuPokemon.physAttack/100))) - ((userPokemon.physDefence / 100) * currentCPUMove.power);
                 }
                 else if(currentCPUMove.type == "special"){
-                userPokemon.health -= currentCPUMove.power - ((userPokemon.specDefence / 100) * currentCPUMove.power);
+                userPokemon.health -= (currentCPUMove.power + (currentCPUMove.power * (cpuPokemon.specAttack/100))) - ((userPokemon.specDefence / 100) * currentCPUMove.power);
                 }
-            }else if(cpuPokemon.effect == 0.25)
-            {
-                userPokemon.health -= (currentCPUMove.power)-(currentCPUMove.power * cpuPokemon.effect);
-                cpuPokemon.effect = null;
-            }
-            else if(cpuPokemon.effect == 0.3){
-                userPokemon.health -= (currentCPUMove.power)+(currentCPUMove.power * cpuPokemon.effect);
-                cpuPokemon.effect = null;
-            }
-            $("#user-health-bar").css("width", userPokemon.health + "%");
-            $("#user-health-bar").text("100/" + userPokemon.health);
-            currentState = playerTurn;
-            loop();
+                $("#user-health-bar").css("width", userPokemon.health + "%");
+                $("#user-health-bar").text("100/" + Math.ceil(userPokemon.health));
+                if(userPokemon.health <= 0){
+                    $("#user-health-bar").text("100/0");
+                }   
+                currentState = playerTurn;
+                loop();
         }
         else{
-            if (!cpuPokemon.effect){
-                userPokemon.health -= currentCPUMove.power * 2;
-            }else if(cpuPokemon.effect == 0.25)
-            {
-                userPokemon.health -= (currentCPUMove.power * 2)-(currentCPUMove.power * cpuPokemon.effect);
-                cpuPokemon.effect = null;
+            if (currentCPUMove.type == "physical"){
+                userPokemon.health -= ((currentCPUMove.power * 2) + (currentCPUMove.power * (cpuPokemon.physAttack/100))) - ((userPokemon.physDefence / 100) * currentCPUMove.power);
             }
-            else if(cpuPokemon.effect == 0.3){
-                userPokemon.health -= (currentCPUMove.power * 2)+(currentCPUMove.power * cpuPokemon.effect);
-                cpuPokemon.effect = null;
-
+            else if(currentCPUMove.type == "special")
+            {
+                userPokemon.health -= ((currentCPUMove.power * 2) + (currentCPUMove.power * (cpuPokemon.specAttack/100))) - ((userPokemon.physDefence / 100) * currentCPUMove.power);
             }
             $("#chat-text").text("The enemy " + cpuPokemon.name + " critically hit!!!");
             $("#user-health-bar").css("width", userPokemon.health + "%");
-            $("#user-health-bar").text("100/" + userPokemon.health);   
+            $("#user-health-bar").text("100/" + Math.ceil(userPokemon.health));
+            if(userPokemon.health <= 0){
+                $("#user-health-bar").text("100/0");
+            }   
             currentState = playerTurn;
             loop();
         }
@@ -301,13 +302,14 @@ var cpuTurn = {
         var defensiveMove = function (){
             $("#attack-img").addClass("hide");
             $("#attack-img").removeClass("cpu-attack");
-            userPokemon.effect = currentCPUMove.power
+            userPokemon.physDefence -= (currentCPUMove.power * 10);
             currentState = playerTurn;
             loop();
         };
         setUpCPUField();
     }
 };
+//player turn, choosing what action to take
 var playerTurn = {
     play: function(){
         var currentUserMove;
@@ -390,7 +392,7 @@ var playerTurn = {
             $(document).on('click', '.playSoundSE', function() {
                 obj.play();
             });
-                setTimeout(defensiveMove, 1500);
+                setTimeout(statusMove, 1500);
             }
         };
         var showMoveAnimation = function () {
@@ -402,42 +404,23 @@ var playerTurn = {
             $("#attack-img").addClass("hide");
             $("#attack-img").removeClass("user-attack");
             var criticalStrike = Math.random();
-            if((currentUserMove.criticalChance * 5) >= criticalStrike || currentUserMove.criticalChance == -1){
-            if (!userPokemon.effect){
+            if(currentUserMove.criticalChance < criticalStrike || currentUserMove.criticalChance == -1){
                 if(currentUserMove.type == "physical"){
-                cpuPokemon.health -= currentUserMove.power - ((cpuPokemon.physDefence /100) * currentUserMove.power);
+                cpuPokemon.health -= (currentUserMove.power + (currentUserMove.power * (userPokemon.physAttack/100))) - ((cpuPokemon.physDefence /100) * currentUserMove.power);
                 }
                 else if(currentUserMove.type == "special"){
-                cpuPokemon.health -= currentUserMove.power - ((cpuPokemon.specDefence /100) * currentUserMove.power);
-
+                cpuPokemon.health -= (currentUserMove.power + (currentUserMove.power * (userPokemon.specAttack/100))) - ((cpuPokemon.specDefence /100) * currentUserMove.power);
                 }
-            }
-            else if(userPokemon.effect == 0.25){
-                cpuPokemon.health -= (currentUserMove.power)-(currentUserMove.power * userPokemon.effect);
-                userPokemon.effect = null;
-            }
-            else if(userPokemon.effect == 0.3){
-                cpuPokemon.health -= (currentUserMove.power)+(currentUserMove.power * userPokemon.effect);
-                userPokemon.effect = null;
-            }
-            $("#enemy-health-bar").css("width", cpuPokemon.health + "%");
-            currentState = cpuTurn;
-            loop();
+                $("#enemy-health-bar").css("width", cpuPokemon.health + "%");
+                currentState = cpuTurn;
+                loop();
         }
         else{
-            if (!userPokemon.effect){
-                cpuPokemon.health -= currentUserMove.power * 2;
-
-            }else if(userPokemon.effect == 0.25)
-            {
-                cpuPokemon.health -= (currentUserMove.power * 2)-(currentUserMove.power * userPokemon.effect);
-                userPokemon.effect = null;
-
+            if(currentUserMove.type == "physical"){
+            cpuPokemon.health -= ((currentUserMove.power * 2) + (currentUserMove.power * (userPokemon.physAttack/100))) - ((cpuPokemon.physDefence /100) * currentUserMove.power);
             }
-            else if(userPokemon.effect == 0.3){
-                cpuPokemon.health -= (currentUserMove.power * 2)+(currentUserMove.power * userPokemon.effect);
-                userPokemon.effect = null;
-
+            else if(currentUserMove.type == "special"){
+            cpuPokemon.health -= ((currentUserMove.power * 2) + (currentUserMove.power * (userPokemon.specAttack/100))) - ((cpuPokemon.specDefence /100) * currentUserMove.power);
             }
             $("#chat-text").text("Your " + userPokemon.name + " critically hit!!!");
             $("#enemy-health-bar").css("width", cpuPokemon.health + "%");
@@ -446,10 +429,15 @@ var playerTurn = {
 
         }
     };
-        var defensiveMove = function (){
+        var statusMove = function (){
             $("#attack-img").addClass("hide");
             $("#attack-img").removeClass("user-attack");
-            cpuPokemon.effect = currentUserMove.power
+            if(cpuPokemon.physAttack == -81){
+                currentUserMove.power = 0;
+            }
+            else{
+            cpuPokemon.physAttack -= (currentUserMove.power * 10);
+            }
             currentState = cpuTurn;
             loop();
         };
@@ -461,6 +449,8 @@ var playerTurn = {
         setUpUserField();
     }
 };
+
+//function that keep shte battle going if none of the pokemonshave reached 0 hp yet
 var loop = function(){
     if(userPokemon.health <= 0){
         endBattle = true;
@@ -472,7 +462,8 @@ var loop = function(){
     else if(cpuPokemon.health <= 0){
         endBattle = true;
         if(endBattle){
-        userPokemon.xp = 50;
+        userPokemon.xp += 50;
+        console.log(userPokemon.xp);
         $("#trainer").fadeIn(3000);
         $("#background").fadeIn(3000);
         $("#main-container").fadeOut(4000);
@@ -484,6 +475,8 @@ var loop = function(){
         currentState.play();
     }
 };
+
+//function that sets the stage
 var init = function(){
     cpuPokemon = pikachu;
     userPokemon = charmander;
