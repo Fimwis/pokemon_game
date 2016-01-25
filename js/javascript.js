@@ -6,8 +6,12 @@ var currentState;
 var cpuPokemon;
 var userPokemon;
 
+var wildPokHealth = 100;
+
 var endBattle = false;
-var startBattle = false;
+var winBattle = false;
+
+
 var grass1 = document.getElementById("grass1");
 var grass1Location = grass1.getBoundingClientRect();
 
@@ -36,6 +40,42 @@ window.onload = function(){
     canvasContext.fillRect(0, 0, canvas.width, canvas.height);
     battle();
 }
+function wildGrass1(){
+    if(trainerX >= (grass1Location.left + 5) && trainerX <= (grass1Location.left + (grass1Location.width * 2) - 5)){
+        if(trainerY >= (grass1Location.top + 5) && trainerY <= (grass1Location.top + grass1Location.height - 5)){
+            $("#trainer").fadeOut(2000);
+            $("#background").fadeOut(3000);
+            pokeBattle.play();
+            $("#main-container").fadeIn("slow");
+            $("#refresh").fadeIn("slow");
+        }
+    }
+}
+function wildGrass2(){
+    if(trainerX >= (grass2Location.left + 5) && trainerX <= (grass2Location.left + (grass2Location.width * 2) - 5)){
+        if(trainerY >= (grass2Location.top + 5) && trainerY <= (grass2Location.top + grass2Location.height - 5)){
+            startBattle = true;
+            $("#trainer").fadeOut(2000);
+            $("#background").fadeOut(3000);
+            pokeBattle.play();
+            $("#main-container").fadeIn("slow");
+            $("#refresh").fadeIn("slow");
+        }
+    }
+}
+function wildGrass3(){
+    if(trainerX >= (grass3Location.left + 5) && trainerX <= grass3Location.left + (grass3Location.width - 5)){
+        if(trainerY >= (grass3Location.top + 5) && trainerY <= (grass3Location.top + grass3Location.height - 5)){
+            startBattle = true;
+
+            $("#trainer").fadeOut(2000);
+            $("#background").fadeOut(3000);
+            pokeBattle.play();
+            $("#main-container").fadeIn("slow");
+            $("#refresh").fadeIn("slow");
+        }
+    }
+}
 //conditions that must be met for battle to start
 function battle(){    
     $(this).keydown(function(e){
@@ -54,41 +94,18 @@ function battle(){
         $('#trainer').stop(true).animate({top: '+=20px'});
 
     }
-    var trainer = document.getElementById("trainer");
-    var trainerLocation = trainer.getBoundingClientRect();
-    var trainerX = trainerLocation.left;
-    var trainerY = trainerLocation.top;
-    if(trainerX >= (grass1Location.left + 5) && trainerX <= (grass1Location.left + (grass1Location.width * 2) - 5)){
-        if(trainerY >= (grass1Location.top + 5) && trainerY <= (grass1Location.top + grass1Location.height - 5)){
-            startBattle = true;
-            console.log(startBattle);
-            $("#trainer").fadeOut(2000);
-            $("#background").fadeOut(3000);
-            pokeBattle.play();
-            $("#main-container").fadeIn("slow");
-            $("#refresh").fadeIn("slow");
-        }
+    trainer = document.getElementById("trainer");
+    trainerLocation = trainer.getBoundingClientRect();
+    trainerX = trainerLocation.left;
+    trainerY = trainerLocation.top;
+    if(winBattle == true){
+        wildPokHealth = 100;
+        setTimeout(wildGrass1, 10000);
     }
-    else if(trainerX >= (grass2Location.left + 5) && trainerX <= (grass2Location.left + (grass2Location.width * 2) - 5)){
-        if(trainerY >= (grass2Location.top + 5) && trainerY <= (grass2Location.top + grass2Location.height - 5)){
-            startBattle = true;
-            $("#trainer").fadeOut(2000);
-            $("#background").fadeOut(3000);
-            pokeBattle.play();
-            $("#main-container").fadeIn("slow");
-            $("#refresh").fadeIn("slow");
-        }
-    }
-    else if(trainerX >= (grass3Location.left + 5) && trainerX <= grass3Location.left + (grass3Location.width - 5)){
-        if(trainerY >= (grass3Location.top + 5) && trainerY <= (grass3Location.top + grass3Location.height - 5)){
-            startBattle = true;
-
-            $("#trainer").fadeOut(2000);
-            $("#background").fadeOut(3000);
-            pokeBattle.play();
-            $("#main-container").fadeIn("slow");
-            $("#refresh").fadeIn("slow");
-        }
+    else{
+        wildGrass1();
+        wildGrass2();
+        wildGrass3();
     }
 });
 }
@@ -406,24 +423,24 @@ var playerTurn = {
             var criticalStrike = Math.random();
             if(currentUserMove.criticalChance < criticalStrike || currentUserMove.criticalChance == -1){
                 if(currentUserMove.type == "physical"){
-                cpuPokemon.health -= (currentUserMove.power + (currentUserMove.power * (userPokemon.physAttack/100))) - ((cpuPokemon.physDefence /100) * currentUserMove.power);
+                wildPokHealth -= (currentUserMove.power + (currentUserMove.power * (userPokemon.physAttack/100))) - ((cpuPokemon.physDefence /100) * currentUserMove.power);
                 }
                 else if(currentUserMove.type == "special"){
-                cpuPokemon.health -= (currentUserMove.power + (currentUserMove.power * (userPokemon.specAttack/100))) - ((cpuPokemon.specDefence /100) * currentUserMove.power);
+                wildPokHealth -= (currentUserMove.power + (currentUserMove.power * (userPokemon.specAttack/100))) - ((cpuPokemon.specDefence /100) * currentUserMove.power);
                 }
-                $("#enemy-health-bar").css("width", cpuPokemon.health + "%");
+                $("#enemy-health-bar").css("width", wildPokHealth + "%");
                 currentState = cpuTurn;
                 loop();
         }
         else{
             if(currentUserMove.type == "physical"){
-            cpuPokemon.health -= ((currentUserMove.power * 2) + (currentUserMove.power * (userPokemon.physAttack/100))) - ((cpuPokemon.physDefence /100) * currentUserMove.power);
+            wildPokHealth -= ((currentUserMove.power * 2) + (currentUserMove.power * (userPokemon.physAttack/100))) - ((cpuPokemon.physDefence /100) * currentUserMove.power);
             }
             else if(currentUserMove.type == "special"){
-            cpuPokemon.health -= ((currentUserMove.power * 2) + (currentUserMove.power * (userPokemon.specAttack/100))) - ((cpuPokemon.specDefence /100) * currentUserMove.power);
+            wildPokHealth -= ((currentUserMove.power * 2) + (currentUserMove.power * (userPokemon.specAttack/100))) - ((cpuPokemon.specDefence /100) * currentUserMove.power);
             }
             $("#chat-text").text("Your " + userPokemon.name + " critically hit!!!");
-            $("#enemy-health-bar").css("width", cpuPokemon.health + "%");
+            $("#enemy-health-bar").css("width", wildPokHealth + "%");
             currentState = cpuTurn;
             loop();
 
@@ -459,10 +476,11 @@ var loop = function(){
         pokeBattle.pause();
     }
     }
-    else if(cpuPokemon.health <= 0){
+    else if(wildPokHealth <= 0){
         endBattle = true;
         if(endBattle){
         userPokemon.xp += 50;
+        winBattle = true;
         console.log(userPokemon.xp);
         $("#trainer").fadeIn(3000);
         $("#background").fadeIn(3000);
@@ -472,6 +490,7 @@ var loop = function(){
     }
     }
     else{
+        console.log(wildPokHealth);
         currentState.play();
     }
 };
