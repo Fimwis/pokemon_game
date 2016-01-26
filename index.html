@@ -11,7 +11,12 @@
 	</head>
 	
 	<body>
-
+		<div id="gameover" style="width: 100%; height: 100%; background-color: black;" class="hide">
+			<h3 id="lose-battle" style="color: white; float: left"></h3>
+			<div id="playAgain">
+ 				<input id="refresh" type="button" onClick="history.go(0)" VALUE="Play Again">
+ 			</div>
+		</div>
 		<div id="background">
 		<canvas id="canvas" width="1270" height="615"></canvas>
 			<img src="img/grass.png" id="grass1" class="tallGrass absolute" style="width:10em; left:7em; top:8em; z-index: 1">
@@ -78,10 +83,11 @@
 				</div>
 			</div>
 				<div id="win-battle" class="absolute text-30 text-center hide"></div>
-				<div id="lose-battle" class="absolute text-30 text-center hide"></div>
 			<img src="img/toolbar_bg.png" class="img-spacing" style="width:18em; height:12em"/>
 		</div>
 		</div>
+
+	
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script type="text/javascript" src="js/javascript.js"></script>
 		</body>
