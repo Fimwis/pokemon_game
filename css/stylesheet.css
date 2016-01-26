@@ -179,6 +179,9 @@
         margin-top:2px;
         cursor: pointer;
     }
+    #playAgain{
+         float: left;
+    }
     #background{
         text-align: center;
     }
