@@ -9,6 +9,7 @@ var userPokemon;
 var wildPokHealth = 100;
 
 var endBattle = false;
+var startBattle = false;
 var winBattle = false;
 
 
@@ -19,7 +20,7 @@ var grass2 = document.getElementById("grass2");
 var grass2Location = grass2.getBoundingClientRect();
 
 var grass3 = document.getElementById("grass3");
-var grass3Location = grass2.getBoundingClientRect();
+var grass3Location = grass3.getBoundingClientRect();
 
 //background music
 var pokeBattle = document.createElement("audio");
@@ -32,13 +33,13 @@ pokeBattle.addEventListener('ended', function() {
     this.play();
 }, false);
 pokeBattle.pause();
-var wildPokemon = Math.floor(Math.random() * 3);
 window.onload = function(){
     canvas = document.getElementById("canvas");
     canvasContext = canvas.getContext("2d");
     canvasContext.fillStyle = "#78AB46";
     canvasContext.fillRect(0, 0, canvas.width, canvas.height);
-    battle();
+    move();
+
 }
 function wildGrass1(){
     if(trainerX >= (grass1Location.left + 5) && trainerX <= (grass1Location.left + (grass1Location.width * 2) - 5)){
@@ -47,7 +48,6 @@ function wildGrass1(){
             $("#background").fadeOut(3000);
             pokeBattle.play();
             $("#main-container").fadeIn("slow");
-            $("#refresh").fadeIn("slow");
         }
     }
 }
@@ -59,7 +59,6 @@ function wildGrass2(){
             $("#background").fadeOut(3000);
             pokeBattle.play();
             $("#main-container").fadeIn("slow");
-            $("#refresh").fadeIn("slow");
         }
     }
 }
@@ -72,15 +71,15 @@ function wildGrass3(){
             $("#background").fadeOut(3000);
             pokeBattle.play();
             $("#main-container").fadeIn("slow");
-            $("#refresh").fadeIn("slow");
         }
     }
 }
 //conditions that must be met for battle to start
-function battle(){    
+function move(){
     $(this).keydown(function(e){
     if(e.which == 37){
         $('#trainer').stop(true).animate({left: '-=20px'});
+        wildPokemon = Math.floor(Math.random() * 3);
     }
     else if(e.which == 38){
         $('#trainer').stop(true).animate({top: '-=20px'});
@@ -88,7 +87,7 @@ function battle(){
     }
     else if(e.which == 39){
         $('#trainer').stop(true).animate({left: '+=20px'});
-
+        wildPokemon = Math.floor(Math.random() * 3);
     }
     else if(e.which == 40){
         $('#trainer').stop(true).animate({top: '+=20px'});
@@ -98,15 +97,17 @@ function battle(){
     trainerLocation = trainer.getBoundingClientRect();
     trainerX = trainerLocation.left;
     trainerY = trainerLocation.top;
+    if(wildPokemon == 1){
     if(winBattle == true){
-        wildPokHealth = 100;
-        setTimeout(wildGrass1, 10000);
+        setTimeout(wildGrass1, 4000);
     }
     else{
         wildGrass1();
         wildGrass2();
         wildGrass3();
     }
+    }
+    console.log(wildPokemon);
 });
 }
 //pokemon objects
@@ -117,9 +118,10 @@ var charmander = {
     lvl: 6,
     physAttack: 25,
     specAttack: 25,
-    physDefence: 30,
-    specDefence: 40,
+    physDefence: 32,
+    specDefence: 35,
     xp: 0,
+    speed: 40,
     moves: [{
         name:"ember",
         type: "special",
@@ -147,26 +149,26 @@ var charmander = {
     {
         name:"scratch",
         type: "physical",
-        power: 30,
-        accuracy: 0.5,
+        power: 35,
+        accuracy: 1,
         PP: 30,
-        criticalChance: 0.2
+        criticalChance: 0.9
     }]
 };
 //enemy/wild pokemon
 var pikachu = {
     name: "Pikachu",
-    health: 100,
     lvl: 8,
     physDefence: 40,
-    specDefence: 25,
-    physAttack: 20,
-    specAttack: 35,
+    specDefence: 28,
+    physAttack: 32,
+    specAttack: 37,
+    speed: 50,
     moves: [
     {
         name:"thunder-shock",
         type: "special",
-        power: 33,
+        power: 30,
         accuracy: 0.8,
         PP: 15,
         criticalChance: 0.15
@@ -190,25 +192,33 @@ var pikachu = {
     {
         name:"scratch",
         type: "physical",
-        power: 30,
+        power: 35,
         accuracy: 0.5,
         PP: 30,
-        criticalChance: 0.2
+        criticalChance: 0.4
     }]
 };
 
 //cpu ai and its course of action during its turn
 var cpuTurn = {
-    play: function () {
+    play: function () {            
+
         var randomMove = Math.floor(Math.random() * 4);
         var currentCPUMove = cpuPokemon.moves[randomMove];
 
         var setUpCPUField = function () {
-            $("#chat-text").text("What will " + cpuPokemon.name + " do?");
-            attackAnimation();
+            if(startBattle == false){
+                $("#chat-text").text("A wild " + cpuPokemon.name + " appeared!");
+                setTimeout(attackAnimation, 9200);
+            }
+            else{
+                setTimeout(attackAnimation, 1300);
+            }
+            startBattle = true;
         };
 
         var attackAnimation = function () {
+            console.log(startBattle);
             $(".pika").animate({
                 top: "-=1em",
             }, 250, function() {
@@ -225,12 +235,6 @@ var cpuTurn = {
                 $("#chat-text").text(cpuPokemon.name + " used " + currentCPUMove.name + "!");
                 if(currentCPUMove.name == "tail whip"){
                     $("#chat-text").text(cpuPokemon.name + " used " + currentCPUMove.name + "!" + " " + userPokemon.name + "'s defence was lowered!");
-                if(userPokemon.name.length >= 8){
-                    userPokemon.name = userPokemon.name.substring(0,4).toUpperCase();
-                     $("#chat-text").text(cpuPokemon.name + " used " + currentCPUMove.name + "!" + " " + userPokemon.name + "'s defence was lowered!");
-                     currentState = playerTurn;
-                     setTimeout(loop, 1500)
-                }
                 }
                 getMoveType();
             }
@@ -331,8 +335,10 @@ var playerTurn = {
     play: function(){
         var currentUserMove;
         var setUpUserField = function () {
+
             var moveButtons = [".move1-text", ".move2-text", ".move3-text", ".move4-text"];
             $(".user-buttons").removeClass("hide");
+
             $("#chat-text").text("What will " + userPokemon.name + " do?");
             
             for(var i = moveButtons.length - 1; i >= 0; i--){
@@ -472,8 +478,9 @@ var loop = function(){
     if(userPokemon.health <= 0){
         endBattle = true;
         if(endBattle){
-        $("#lose-battle").removeClass("hide");
         pokeBattle.pause();
+        $("#main-container").addClass("hide")
+        $("#gameover").removeClass("hide");
     }
     }
     else if(wildPokHealth <= 0){
@@ -490,11 +497,16 @@ var loop = function(){
     }
     }
     else{
-        console.log(wildPokHealth);
         currentState.play();
     }
 };
 
+function newWild(){
+    if(winBattle == true){
+        wildPokHealth = 100;
+    }
+    winBattle = false;
+}
 //function that sets the stage
 var init = function(){
     cpuPokemon = pikachu;
@@ -506,7 +518,13 @@ var init = function(){
     $(".enemy-pokemon-lvl").text("Lv" + cpuPokemon.lvl);
     $("#lose-battle").text("Your " + userPokemon.name + " has fainted. You quickly run away to the Pokemon Center...");
     $("#win-battle").text("The enemy " + cpuPokemon.name + " fainted. You win the battle!");    
-    currentState = playerTurn;
+    if(userPokemon.speed > cpuPokemon.speed){
+        currentState = playerTurn;
+    }
+    else{
+        currentState = cpuTurn;
+    }
     loop();
+    console.log(wildPokHealth);
 };
 init();
